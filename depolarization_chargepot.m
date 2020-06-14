@@ -15,6 +15,8 @@ function depolarization()
     Na = 6.022e23;
     
     Qm = A*DeltaV*cap - sum( Cin ) * Na * e * V;
+    disp("Initial charge [pC]: ");
+    disp(A*DeltaV*cap*1e12);
     
     % Print initial fluxes
     disp("K+ Na+")
@@ -78,8 +80,15 @@ function depolarization()
     ylabel("Charge [pC]");
     
     disp("Equilibrium values:");
+    disp("K+ Na+");
     disp("Concentrations [mM]:");
     disp(C(numstep,:));
     disp("Potential [V]:");
     disp(pot(numstep));
+    disp("Charge [pC]:");
+    disp((sum( C(numstep,:) ) * e * Na * V + Qm ) * 1e12 )
+    disp("Final fluxes:")
+    disp( P.*z*e*pot(numstep)/kBT .* ( C(numstep,:).*exp( z*e*pot(numstep)/kBT ) - Cout ) ./ ( 1 - exp( z*e*pot(numstep)/kBT ) ) )
+
+    
 end

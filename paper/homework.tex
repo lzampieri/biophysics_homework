@@ -68,7 +68,7 @@
 \maketitle
 
 \section*{Abstract}
-In a living cell, major transmembrane currents components are given by sodium and potassium ions. While the extracellular fluid can be considered a infinite reservoir of ions, and their concentration can be considered constant, the cytoplasm have a finite volume and the concentration of the sodium and potassium ions inside the cell is strongly affected by transmembrane currents. In absence of active sodium and potassium pumps, deputed to maintain the correct concentration gradient between the two sides of the cellular membrane, the ions flux will depolarize the cell leading to a null resting potential difference and a null resting concentration gradient. In this paper, the Goldman-Hodgkin-Katz current equation\todo{Citazione necessaria} will be used to model the membrane of a non-excitable cell, i.e. a cell without voltage-gated sodium and potassium channels, in absence of active pumps. A typical mammalian cell will be numerical simulated and the results discussed.
+In a living cell, major transmembrane currents components are given by sodium and potassium ions. While the extracellular fluid can be considered as a infinite reservoir of ions, and their concentration can be considered constant, the cytoplasm have a finite volume and the concentration of the sodium and potassium ions is strongly affected by transmembrane currents. In absence of active sodium and potassium pumps, deputed to maintain the correct concentration gradient between the two sides of the cellular membrane, the ions flux will depolarize the cell. In this paper, the Goldman-Hodgkin-Katz flux equation will be used to model the membrane of a non-excitable cell, i.e. a cell without voltage-gated sodium and potassium channels, in absence of active pumps. A typical mammalian cell will be numerical simulated and the results discussed.
 
 \section{Introduction}
 The physical parameters of a living cell are fundamental to keep functional all the cell apparatus, and to permit an efficient carrying out of the chemical and physical process of the cell lifecycle. Among them, the concentration of ions, and in particular of potassium and sodium one, and the resting potential. They are fundamental, for example, to the correct operation of complex transmembrane proteins, and in general to keep the cell alive. Given the concentration of a ion specie inside the cell $[S]_{in}$ and the concentration of the same specie outside the cell $[S]_{out}$, the Nerst potential is the hypothetical transmembrane potential which completely counterbalance the effects of concentration gradients, leading to a stable equilibrium. It can be computed as:
@@ -76,7 +76,7 @@ The physical parameters of a living cell are fundamental to keep functional all 
     V_N = \frac{RT}{zF} \ln\frac{[S]_{out}}{[S]_{in}}
 \end{align*}
 
-The resting cell potential is typically different from the Nerst one, and therefore the ions concentrations are not at equilibrium. This means that a current flow between the cell membrane, moving ions between the two sides. Typically, these current are counterbalanced by active pumps, which uses ATP to transport ions counter-gradient: for example, the \ch{Na+ /K+}-ATPase. If these pumps are not present, the total ions fluxes are not null and the cells stability is lost.
+The resting cell potential is typically different from the Nerst one, and therefore the ions concentrations are not at equilibrium. This means that a current flows between the cell membrane, moving ions between the two sides. Typically, this current is counterbalanced by active pumps, which uses ATP to transport ions counter-gradient: for example, the \ch{Na+ /K+}-ATPase. If these pumps are not present, the total ions fluxes are not null and the cells stability is lost.
 
 The extracellular liquid can be considered infinitely-spread and, in our simplified model, homogeneous: it acts like a reservoir of ions, and therefore the variations in concentrations induced by ions fluxes the cell are negligible. On the other side, the cell have a finite volume and therefore a finite number of ions inside it: the ions fluxes strongly affect the concentration inside the cell, and can lead to a depolarization of the membrane.
 
@@ -85,7 +85,7 @@ Let's start from the Smoluchowki equation of flux, describing the flux of ions u
 \begin{gather*}
     J = - D \pdv{C}{x} + BXC
 \end{gather*}
-where $J$ is the ions flux (ions passing per unit of area), $D$ is the diffusion coefficient, $C$ is the concentration, $B$ is the mobility and $X$ is the external force. Consider a potential difference $\Delta V$ between the two sides of the membrane:
+where $J$ is the ions flux entering the cell (ions passing per unit of area), $D$ is the diffusion coefficient, $C$ is the concentration, $B$ is the mobility and $X$ is the external force. Consider a potential difference $\Delta V$ between the two sides of the membrane:
 \begin{align*}
     J &= - D \pdv{C}{x} - zeBC\pdv{V}{x}
 \end{align*}
@@ -100,7 +100,7 @@ Considering $D$ constant over $x$ and integrating both members between the two s
 \begin{align*}
     J = - D \frac{C_oe^{\frac{zeV_o}{k_BT}} - C_ie^{\frac{zeV_i}{k_BT} }}{ \int_i^o e^{\frac{zeV_o}{k_BT}} \dd{x}}
 \end{align*}
-where the subscript $i$ labels quantities computed on the internal side of the membrane, while subscript $o$ labels quantities computed on the external one. Considering a linear dumping potential $V = \frac{\Delta V}{d} x$, being $\Delta V = V_i - V_o$, can be easily found:
+where the subscript $i$ labels quantities computed on the internal side of the membrane, while subscript $o$ labels quantities computed on the external one. Considering a linear dumping potential $V = \frac{\Delta V}{d} x$, being $\Delta V = V_i - V_o$, can be easily find:
 \begin{align*}
     J = \frac{zeD\Delta V}{k_BTd} \frac{C_ie^{\frac{ze\Delta V}{k_BT} } - C_0 }{1 - e^{\frac{ze\Delta V}{k_BT} }}
 \end{align*}
@@ -115,7 +115,7 @@ The current density $j$ is given by the flux of ions multiplied by the charge ca
     j = zeJ \numberthis \label{eqn:current}
 \end{align*}
 
-Combining eqs. \eqref{eqn:GHK} and \eqref{eqn:current}, one obtain the so-called Goldman-Hodgkin-Katz equation\todo{citazione necessaria}.
+Combining eqs. \eqref{eqn:GHK} and \eqref{eqn:current}, one obtain the so-called Goldman-Hodgkin-Katz equation\footnote{B. Hille, \emph{Ion Channels of Excitable Membranes} (2001)}.
 
 \bigskip
 From an electric point of view, the cell can be seen as a capacitor: being $c$ the capacitance per unit of area, the electric equation of the system is
@@ -176,5 +176,75 @@ Regarding the second simulations, reversing eq. \ref{eqn:potwithchar} it's easy 
 \end{align*}
 
 \section{Simulations}
+Simulations has been carried out in MatLab R2019b. The system has been integrated using a 1\textsuperscript{st} order time evolutor:
+\begin{gather*}
+    C_i(t+\Delta t) = C_i(t) + J(t) \frac{A}{V} \Delta t \\
+    \Delta V(t+\Delta t) = \Delta V(t) + \frac{j_{Na}(t) + j_K(t)}{c} \Delta t
+\end{gather*}
+
+The time step has been chosen $1\si{ns}$, and the system is evolved until an equilibrium is reached. The results are reporting in the following plots (the MatLab code is in the appendix):
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{potential_diffpot.pdf}
+    \caption{Potential and concentrations as functions of time. Differential potential evolution.}
+    \label{fig:potential_diffpot}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{current_diffpot.pdf}
+    \caption{Current as functions of time. Differential potential evolution.}
+    \label{fig:current_diffpot}
+\end{figure}
+
+As can be seen from the plots, at $t=0$ there is a positive current of sodium ions entering the cells and a negative one of potassium ions; this means that the internal concentration of sodium ions increase while the potassium one decrease. The process, as it's clear from the plots, reach an asymptotic equilibrium which is calculated to be:
+\begin{gather*}
+    C_i^K = 4.5 \si{mM}\\
+    C_i^{Na} = 163 \si{mM}\\
+    V = -3.0 \si{mV}
+\end{gather*}
+
+In this situation, fluxes are negligible: the cell have reach a static equilibrium. Observe that the found equilibrium concentration are similar to the extracellular ones, with a small difference due to the non-zero potential difference. 
+
+\bigskip
+Consider instead the presence of negative charges inside the cell, and eq. \eqref{eqn:potwithchar}. A second simulation has been performed considering the following update rules:
+\begin{gather*}
+    C_i(t+\Delta t) = C_i(t) + J(t) \frac{A}{V} \Delta t \\
+    \Delta V(t+\Delta t) =  \frac{(z_KC_i^K(t+\Delta t) + z_{Na}C_i^{Na}(t+\Delta t))e\mathcal{V} + Q_-}{cA}
+\end{gather*}
+
+This second simulation method allow us to follow the temporal evolution of the total cell charge:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{potential_chargepot.pdf}
+    \caption{Potential and concentrations as functions of time. Potential computed from charge.}
+    \label{fig:potential_chargepot}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{current_chargepot.pdf}
+    \caption{Current as functions of time. Potential computed from charge.}
+    \label{fig:current_chargepot}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{charge_chargepot.pdf}
+    \caption{Total charge as functions of time. Potential computed from charge.}
+    \label{fig:charge_chargepot}
+\end{figure}
+
+As can be seen from the plot, the result of the time evolution is identical from the two methods, confirming us that they're both valid to simulate the system. Regarding the total charge, it's clear that the cell tend to the neutrality, reaching an equilibrium total charge (consider that the initial charge was $-1.26\si{pC}$) of:
+\begin{align*}
+    Q = -0.04 \si{pC}
+\end{align*}
+
+\section*{Conclusion}
+In this paper, a non-excitable finite cell has been considered and the evolution of the concentration of sodium and potassium ions concentrations have been simulated. In particular, has been proven that if no active pumps are present the the cell go through a depolarization, reaching an equilibrium when the concentrations are similar to the extracellular ones. Moreover, two different methods for simulating the potential evolution have been tested, finding identical results. The second method, moreover, shows that the cell tends to the charge neutrality.
+
+In the future, the simulation can be improved considering other ions, both positive and negative, which secondary contribute to cell depolarization. Moreover, \ch{Na+ / K+}-ATPase pumps can be added to study the energy needed to keep the correct physiological conditions.
 
 \end{document}

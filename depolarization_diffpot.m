@@ -49,15 +49,15 @@ function depolarization()
     timesteps = 0:timestep:(numstep-1)*timestep;
     opengl software;
     figure();
+    plot(timesteps,pot*1e3);
     hold on;
     title("Potential and concentrations inside the cell");
     xlabel("Time [s]");
     ylabel("Potential [mV]");
-    plot(timesteps,pot*1e3);
     yyaxis right;
     ylabel("Concentration [mM]");
     plot(timesteps,C);
-    legend('V','K+','Na+');
+    legend('\Delta V','K+','Na+');
     hold off;
     
     figure();
@@ -68,8 +68,12 @@ function depolarization()
     legend('K+','Na+','Total');
     
     disp("Equilibrium values:");
+    disp("K+ Na+");
     disp("Concentrations [mM]:");
     disp(C(numstep,:));
     disp("Potential [V]:");
     disp(pot(numstep));
+    disp("Final fluxes:")
+    disp( P.*z*e*pot(numstep)/kBT .* ( C(numstep,:).*exp( z*e*pot(numstep)/kBT ) - Cout ) ./ ( 1 - exp( z*e*pot(numstep)/kBT ) ) )
+
 end
