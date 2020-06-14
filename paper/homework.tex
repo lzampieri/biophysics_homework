@@ -1,0 +1,180 @@
+\documentclass[11pt,a4 paper]{article}
+\usepackage{amsmath, amsthm} 
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2cm]{geometry}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{caption}
+\usepackage{siunitx}
+\captionsetup{tableposition=top,font=small,width=0.8\textwidth}
+\usepackage{booktabs}
+\usepackage[arrowdel]{physics}
+\usepackage{mathtools}
+\usepackage{tablefootnote}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{hyperref}
+\setlist[description]{font={\scshape}} %style=unboxed,style=nextline
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{floatflt}
+\usepackage{commath}
+\usepackage{bm}
+\usepackage{nicefrac}
+\usepackage{xspace}
+\usepackage{ifthen}
+\usepackage{comment}
+\usepackage[table]{xcolor}
+\usepackage[colorinlistoftodos,textsize=tiny]{todonotes}
+% \usepackage[autostyle,italian=guillemets]{csquotes}
+% \usepackage[backend=biber,style=alphabetic,maxalphanames=4,maxbibnames=6]{biblatex}
+% \addbibresource{D:/ZoteroBib.bib}
+% \addbibresource{D:/ZoteroSGSSnatBib.bib}
+
+
+\usepackage{chemformula}
+
+\renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+\sisetup{exponent-product = \cdot}
+\newcommand{\tc}{\,\mbox{tc}\,}
+\newcommand{\Epsilon}{\mathcal{E}}
+\renewcommand*{\epsilon}{\varepsilon}
+\newcommand{\half}{\frac{1}{2}}
+\renewcommand{\ev}[1]{\eval{}_{#1}}
+\newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+\renewcommand{\underbar}[1]{\mkern 1.5mu\underline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+\let\oldfrac\frac
+\renewcommand{\frac}[3][d]{\ifthenelse{\equal{#1}{d}}{\oldfrac{#2}{#3}}{\nicefrac{#2}{#3}}}
+\newcommand{\fourier}{\mathcal{F}}
+\DeclareMathOperator{\arcsinh}{arcsinh}
+\DeclareMathOperator{\const}{const}
+\let\var\undefined
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\erfc}{erfc}
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+
+\setlist[itemize]{noitemsep}
+
+\title{To do}
+\author{L. Zampieri - mat. 1237351\\Matlab exercise for Biological Physics exam}
+\date{\today}
+
+\begin{document}
+    
+\maketitle
+
+\section*{Abstract}
+In a living cell, major transmembrane currents components are given by sodium and potassium ions. While the extracellular fluid can be considered a infinite reservoir of ions, and their concentration can be considered constant, the cytoplasm have a finite volume and the concentration of the sodium and potassium ions inside the cell is strongly affected by transmembrane currents. In absence of active sodium and potassium pumps, deputed to maintain the correct concentration gradient between the two sides of the cellular membrane, the ions flux will depolarize the cell leading to a null resting potential difference and a null resting concentration gradient. In this paper, the Goldman-Hodgkin-Katz current equation\todo{Citazione necessaria} will be used to model the membrane of a non-excitable cell, i.e. a cell without voltage-gated sodium and potassium channels, in absence of active pumps. A typical mammalian cell will be numerical simulated and the results discussed.
+
+\section{Introduction}
+The physical parameters of a living cell are fundamental to keep functional all the cell apparatus, and to permit an efficient carrying out of the chemical and physical process of the cell lifecycle. Among them, the concentration of ions, and in particular of potassium and sodium one, and the resting potential. They are fundamental, for example, to the correct operation of complex transmembrane proteins, and in general to keep the cell alive. Given the concentration of a ion specie inside the cell $[S]_{in}$ and the concentration of the same specie outside the cell $[S]_{out}$, the Nerst potential is the hypothetical transmembrane potential which completely counterbalance the effects of concentration gradients, leading to a stable equilibrium. It can be computed as:
+\begin{align*}
+    V_N = \frac{RT}{zF} \ln\frac{[S]_{out}}{[S]_{in}}
+\end{align*}
+
+The resting cell potential is typically different from the Nerst one, and therefore the ions concentrations are not at equilibrium. This means that a current flow between the cell membrane, moving ions between the two sides. Typically, these current are counterbalanced by active pumps, which uses ATP to transport ions counter-gradient: for example, the \ch{Na+ /K+}-ATPase. If these pumps are not present, the total ions fluxes are not null and the cells stability is lost.
+
+The extracellular liquid can be considered infinitely-spread and, in our simplified model, homogeneous: it acts like a reservoir of ions, and therefore the variations in concentrations induced by ions fluxes the cell are negligible. On the other side, the cell have a finite volume and therefore a finite number of ions inside it: the ions fluxes strongly affect the concentration inside the cell, and can lead to a depolarization of the membrane.
+
+\section{Model}
+Let's start from the Smoluchowki equation of flux, describing the flux of ions under a concentration gradient and an external force:
+\begin{gather*}
+    J = - D \pdv{C}{x} + BXC
+\end{gather*}
+where $J$ is the ions flux (ions passing per unit of area), $D$ is the diffusion coefficient, $C$ is the concentration, $B$ is the mobility and $X$ is the external force. Consider a potential difference $\Delta V$ between the two sides of the membrane:
+\begin{align*}
+    J &= - D \pdv{C}{x} - zeBC\pdv{V}{x}
+\end{align*}
+where $z$ is the ion valence and $e$ is the module of electron charge. Considering the Einstein relation $k_BTB = D$ and multiplying both sides by $\exp{\frac{zeV}{k_BT}} / D$, one obtain:
+\begin{align*}
+    J &= - D \pdv{C}{x} - \frac{zeDC}{k_BT}\pdv{V}{x} \\
+    \frac{J}{D} \exp{\frac{zeV}{k_BT}} &= - \pdv{C}{x} \exp{\frac{zeV}{k_BT}} - \frac{zeC}{k_BT}\pdv{V}{x} \exp{\frac{zeV}{k_BT}} \\
+    \frac{J}{D}  e^{\frac{zeV}{k_BT}} &= - \pdv{x} C e^{\frac{zeV}{k_BT}}
+\end{align*}
+
+Considering $D$ constant over $x$ and integrating both members between the two sides of a membrane of width $d$, one obtain:
+\begin{align*}
+    J = - D \frac{C_oe^{\frac{zeV_o}{k_BT}} - C_ie^{\frac{zeV_i}{k_BT} }}{ \int_i^o e^{\frac{zeV_o}{k_BT}} \dd{x}}
+\end{align*}
+where the subscript $i$ labels quantities computed on the internal side of the membrane, while subscript $o$ labels quantities computed on the external one. Considering a linear dumping potential $V = \frac{\Delta V}{d} x$, being $\Delta V = V_i - V_o$, can be easily found:
+\begin{align*}
+    J = \frac{zeD\Delta V}{k_BTd} \frac{C_ie^{\frac{ze\Delta V}{k_BT} } - C_0 }{1 - e^{\frac{ze\Delta V}{k_BT} }}
+\end{align*}
+
+Observe that the diffusion coefficient must be computed \emph{inside} the membrane, and therefore is different from the one outside. Let's define the permeability $P$ as $P = \frac[f]{D}{d}$, where $D$ is computed \emph{inside} the membrane. This lead to the final flux relation:
+\begin{align*}
+    J = P\frac{ze\Delta V}{k_BT} \frac{C_ie^{\frac{ze\Delta V}{k_BT} } - C_0 }{1 - e^{\frac{ze\Delta V}{k_BT} }} \numberthis \label{eqn:GHK}
+\end{align*}
+
+The current density $j$ is given by the flux of ions multiplied by the charge carried by each ion:
+\begin{align*}
+    j = zeJ \numberthis \label{eqn:current}
+\end{align*}
+
+Combining eqs. \eqref{eqn:GHK} and \eqref{eqn:current}, one obtain the so-called Goldman-Hodgkin-Katz equation\todo{citazione necessaria}.
+
+\bigskip
+From an electric point of view, the cell can be seen as a capacitor: being $c$ the capacitance per unit of area, the electric equation of the system is
+\begin{align*}
+    c \pdv{V_i}{t} = \sum j
+\end{align*}
+where the sum runs over all the ions species: in the following, we will consider only \ch{Na+} and \ch{K+} ions. The potential outside the cell, instead, can be considered constant, which means that the last relation can be also written as:
+\begin{align*}
+    c \pdv{\Delta V}{t} = j_{Na} + j_K
+\end{align*}
+
+\bigskip
+In the second part, we will also consider the negative charges inside the cells. These charges are typically due to big proteins, which are not able to pass through the membrane: they can be therefore considered constant in time. One can remember that the potential difference $\Delta V$ can be written as:
+\begin{align*}
+    \Delta V = \frac{\sigma}{c}
+\end{align*}
+where $\sigma$ is the charge surface density. In a spherical homogeneous cell approximation, remembering the Gauss theorem, we can consider all the charge inside the cell uniformly distributed along the inner side of the membrane, which means:
+\begin{align*}
+    \Delta V = \frac{(z_KC_i^K + z_{Na}C_i^{Na})e\mathcal{V} + Q_-}{cA} \numberthis \label{eqn:potwithchar}
+\end{align*}
+where $\mathcal{V}$ is the cell volume, $A$ the surface area and $Q_-$ the negative charge inside the cell.
+
+\section{Parameters}
+For the following simulations, the parameters used are:
+\begin{gather*}
+    P_{K} = 10 \si{\micro m/s} \\
+    P_{Na} = 0.2 \si{\micro m/s} \\
+    c = 1.0 \cdot 10^{-2} \si{F / m^2}
+\end{gather*}
+
+The considered cell has been modelled spherical, with radius, area and volume:
+\begin{align*}
+    R = 10.6 \si{\micro m} \\
+    A = 1400 \si{\micro m^2} \\
+    V = 5000 \si{\micro m^3}
+\end{align*}
+
+The initial values of concentration and potential different has been set to the resting values of mammalian skeletal muscle cell, i.e.:
+\begin{gather*}
+    C_i^K = 155 \si{mM} \qquad C_o^K = 4\si{mM} \\
+    C_i^{Na} = 12 \si{mM} \qquad C_o^{Na} = 145\si{mM} \\
+    \Delta V = -90 \si{mV}
+\end{gather*}
+
+In a cell with these properties, the fluxes of ions computed with eq. \eqref{eqn:GHK} are:
+\begin{gather*}
+    J_K = -0.046 \cdot 10^{-3} \si{mol / m^3s} \\
+    J_{Na} = 0.101 \cdot 10^{-3} \si{mol / m^3s}
+\end{gather*}
+
+These last values gives also an indication of the pumping speed provided by the \ch{Na+ / K+}-ATPase in real cells.
+
+\bigskip
+Regarding the second simulations, reversing eq. \ref{eqn:potwithchar} it's easy to compute:
+\begin{align*}
+    Q_- &= Ac\Delta V - (z_KC_i^K + z_{Na}C_i^{Na})e\mathcal{V} \\
+    &\approx -80.5 \si{nC}
+\end{align*}
+
+\section{Simulations}
+
+\end{document}
