@@ -35,7 +35,7 @@
 % \addbibresource{D:/ZoteroBib.bib}
 % \addbibresource{D:/ZoteroSGSSnatBib.bib}
 
-
+\usepackage[numbered,framed]{matlab-prettifier}
 \usepackage{chemformula}
 
 \renewcommand*{\thefootnote}{\fnsymbol{footnote}}
@@ -59,7 +59,7 @@
 
 \setlist[itemize]{noitemsep}
 
-\title{To do}
+\title{Depolarization of a cell}
 \author{L. Zampieri - mat. 1237351\\Matlab exercise for Biological Physics exam}
 \date{\today}
 
@@ -194,7 +194,7 @@ The time step has been chosen $1\si{ns}$, and the system is evolved until an equ
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.65\textwidth]{current_diffpot.pdf}
-    \caption{Current as functions of time. Differential potential evolution.}
+    \caption{Currents as functions of time. Differential potential evolution.}
     \label{fig:current_diffpot}
 \end{figure}
 
@@ -206,6 +206,14 @@ As can be seen from the plots, at $t=0$ there is a positive current of sodium io
 \end{gather*}
 
 In this situation, fluxes are negligible: the cell have reach a static equilibrium. Observe that the found equilibrium concentration are similar to the extracellular ones, with a small difference due to the non-zero potential difference. 
+
+Finally, even if the total current is very low with respect to the two currents of sodium and potassium, it's not zero: its behavior can be clearly seen in the following plot, in which can be observed that the current maximum correspond to the potential flex, while when the current goes to zero the potential reaches its stability.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{potcurr_diffpot.pdf}
+    \caption{Current and potential as functions of time; note that first instants with initial peaks have not been reported. Differential potential evolution.}
+    \label{fig:potcurr_diffpot}
+\end{figure}
 
 \bigskip
 Consider instead the presence of negative charges inside the cell, and eq. \eqref{eqn:potwithchar}. A second simulation has been performed considering the following update rules:
@@ -237,7 +245,7 @@ This second simulation method allow us to follow the temporal evolution of the t
     \label{fig:charge_chargepot}
 \end{figure}
 
-As can be seen from the plot, the result of the time evolution is identical from the two methods, confirming us that they're both valid to simulate the system. Regarding the total charge, it's clear that the cell tend to the neutrality, reaching an equilibrium total charge (consider that the initial charge was $-1.26\si{pC}$) of:
+As can be seen from the plots, the result of the time evolution is identical from the two methods, confirming us that they're both valid to simulate the system. Also equivalent of plot \ref{fig:potcurr_diffpot} has been considered, obtaining identical results. Regarding the total charge, it's clear that the cell tend to the neutrality, reaching an equilibrium total charge (consider that the initial charge was $-1.26\si{pC}$) of:
 \begin{align*}
     Q = -0.04 \si{pC}
 \end{align*}
@@ -246,5 +254,13 @@ As can be seen from the plot, the result of the time evolution is identical from
 In this paper, a non-excitable finite cell has been considered and the evolution of the concentration of sodium and potassium ions concentrations have been simulated. In particular, has been proven that if no active pumps are present the the cell go through a depolarization, reaching an equilibrium when the concentrations are similar to the extracellular ones. Moreover, two different methods for simulating the potential evolution have been tested, finding identical results. The second method, moreover, shows that the cell tends to the charge neutrality.
 
 In the future, the simulation can be improved considering other ions, both positive and negative, which secondary contribute to cell depolarization. Moreover, \ch{Na+ / K+}-ATPase pumps can be added to study the energy needed to keep the correct physiological conditions.
+
+\appendix
+\section{Matlab code - First simulation}
+\lstinputlisting[style=Matlab-editor]{depolarization_diffpot.m}
+    
+\section{Matlab code - Second simulation}
+Only variations with respect to the previous code are reported.
+\lstinputlisting[style=Matlab-editor]{depolarization_chargepot.m}
 
 \end{document}

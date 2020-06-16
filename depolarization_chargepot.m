@@ -11,7 +11,7 @@ function depolarization()
     DeltaV = -90e-3;
     z = [ 1 1 ];
     e = 1.6e-19;
-    kBT = 4.27e-21; % @36°C
+    kBT = 4.27e-21; % at 36C
     Na = 6.022e23;
     
     Qm = A*DeltaV*cap - sum( Cin ) * Na * e * V;
